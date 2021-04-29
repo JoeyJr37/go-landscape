@@ -12,11 +12,10 @@ if (!userArgs[0].startsWith('mongodb')) {
 */
 var async = require('async')
 
-var Book = require('./models/book')
-var Author = require('./models/author')
-var Genre = require('./models/genre')
-var BookInstance = require('./models/bookinstance')
-
+var Location = require('./models/location')
+var Position = require('./models/positions')
+var Staff = require('./models/staff')
+var Team = require('./models/team')
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0];
@@ -25,112 +24,107 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-var authors = []
-var genres = []
-var books = []
-var bookinstances = []
+var locations = []
+var positions = []
+var staff_names = []
+var teams = []
 
-function authorCreate(first_name, family_name, d_birth, d_death, cb) {
-  authordetail = {first_name:first_name , family_name: family_name }
-  if (d_birth != false) authordetail.date_of_birth = d_birth
-  if (d_death != false) authordetail.date_of_death = d_death
+function staffCreate(first_name, last_name, date_of_birth, phone, email, pastor, location, position, cb) {
+  staffdetail = 
+    {
+        first_name:first_name, 
+        last_name: last_name,
+        date_of_birth: date_of_birth,
+        phone:phone,
+        email:email,
+        pastor: pastor,
+        location: location,
+        position: position,
+    }
   
-  var author = new Author(authordetail);
+  var staff = new Staff(staffdetail);
        
-  author.save(function (err) {
+  staff.save(function (err) {
     if (err) {
       cb(err, null)
       return
     }
-    console.log('New Author: ' + author);
-    authors.push(author)
-    cb(null, author)
+    console.log('New Staff: ' + staff);
+    staff_names.push(staff)
+    cb(null, staff)
   }  );
 }
 
-function genreCreate(name, cb) {
-  var genre = new Genre({ name: name });
+function locationCreate(city, country, cb) {
+  var location = new Location({ city: city, country: country });
        
-  genre.save(function (err) {
+  location.save(function (err) {
     if (err) {
       cb(err, null);
       return;
     }
-    console.log('New Genre: ' + genre);
-    genres.push(genre)
-    cb(null, genre);
+    console.log('New Location: ' + location);
+    locations.push(location)
+    cb(null, location);
   }   );
 }
 
-function bookCreate(title, summary, isbn, author, genre, cb) {
-  bookdetail = { 
-    title: title,
-    summary: summary,
-    author: author,
-    isbn: isbn
-  }
-  if (genre != false) bookdetail.genre = genre
-    
-  var book = new Book(bookdetail);    
-  book.save(function (err) {
+function positionCreate(title, cb) {
+  var position = new Position({ title: title });
+       
+  position.save(function (err) {
     if (err) {
-      cb(err, null)
-      return
+      cb(err, null);
+      return;
     }
-    console.log('New Book: ' + book);
-    books.push(book)
-    cb(null, book)
-  }  );
+    console.log('New Position: ' + position);
+    positions.push(position)
+    cb(null, position);
+  }   );
 }
 
-
-function bookInstanceCreate(book, imprint, due_back, status, cb) {
-  bookinstancedetail = { 
-    book: book,
-    imprint: imprint
-  }    
-  if (due_back != false) bookinstancedetail.due_back = due_back
-  if (status != false) bookinstancedetail.status = status
-    
-  var bookinstance = new BookInstance(bookinstancedetail);    
-  bookinstance.save(function (err) {
+function teamsCreate(name, cb) {
+  var team = new Team({ name: name });
+       
+  team.save(function (err) {
     if (err) {
-      console.log('ERROR CREATING BookInstance: ' + bookinstance);
-      cb(err, null)
-      return
+      cb(err, null);
+      return;
     }
-    console.log('New BookInstance: ' + bookinstance);
-    bookinstances.push(bookinstance)
-    cb(null, book)
-  }  );
+    console.log('New Team: ' + team);
+    teams.push(team)
+    cb(null, team);
+  }   );
 }
 
-
-function createGenreAuthors(cb) {
+function createPositionsLocations(cb) {
     async.series([
         function(callback) {
-          authorCreate('Patrick', 'Rothfuss', '1973-06-06', false, callback);
+          positionCreate('Team Leader', callback);
         },
         function(callback) {
-          authorCreate('Ben', 'Bova', '1932-11-8', false, callback);
+          positionCreate('Team Member', callback);
         },
         function(callback) {
-          authorCreate('Isaac', 'Asimov', '1920-01-02', '1992-04-06', callback);
+          locationCreate('Siliguri', 'India', callback);
         },
         function(callback) {
-          authorCreate('Bob', 'Billings', false, false, callback);
+          locationCreate('Rajasthan', 'India', callback);
         },
         function(callback) {
-          authorCreate('Jim', 'Jones', '1971-12-16', false, callback);
+          locationCreate('Gateway', 'India', callback);
         },
         function(callback) {
-          genreCreate("Fantasy", callback);
+          locationCreate('Izmir','Turkey', callback);
         },
         function(callback) {
-          genreCreate("Science Fiction", callback);
+          locationCreate('Sale','Morocco', callback);
         },
         function(callback) {
-          genreCreate("French Poetry", callback);
+          locationCreate('Dubai','UAE', callback);
+        },
+        function(callback) {
+          locationCreate('Antalya','Turkey', callback);
         },
         ],
         // optional callback
@@ -138,10 +132,10 @@ function createGenreAuthors(cb) {
 }
 
 
-function createBooks(cb) {
+function createStaff(cb) {
     async.parallel([
         function(callback) {
-          bookCreate('The Name of the Wind (The Kingkiller Chronicle, #1)', 'I have stolen princesses back from sleeping barrow kings. I burned down the town of Trebon. I have spent the night with Felurian and left with both my sanity and my life. I was expelled from the University at a younger age than most people are allowed in. I tread paths by moonlight that others fear to speak of during day. I have talked to Gods, loved women, and written songs that make the minstrels weep.', '9781473211896', authors[0], [genres[0],], callback);
+          staffCreate(first_name, last_name, phone, email, pastor, location, position, callback);
         },
         function(callback) {
           bookCreate("The Wise Man's Fear (The Kingkiller Chronicle, #2)", 'Picking up the tale of Kvothe Kingkiller once again, we follow him into exile, into political intrigue, courtship, adventure, love and magic... and further along the path that has turned Kvothe, the mightiest magician of his age, a legend in his own time, into Kote, the unassuming pub landlord.', '9788401352836', authors[0], [genres[0],], callback);
@@ -210,7 +204,7 @@ function createBookInstances(cb) {
 
 
 async.series([
-    createGenreAuthors,
+    createPositionsLocations,
     createBooks,
     createBookInstances
 ],
