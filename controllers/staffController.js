@@ -1,7 +1,20 @@
 var Staff = require('../models/staff');
+var Locations = require('../models/location');
+
+var async = require('async');
 
 exports.index = function(req, res) {
-    res.send('NOT IMPLEMENTED: Site Home Page');
+
+    async.parallel({
+        staff_count: function(callback) {
+            Staff.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+        },
+        locations_count: function(callback) {
+            Locations.countDocuments({}, callback);
+        },
+    }, function(err, results) {
+        res.render('index', { title: 'Local Library Home', error: err, data: results });
+    });
 };
 
 // Display list of all books.
