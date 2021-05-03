@@ -10,12 +10,12 @@ if (!userArgs[0].startsWith('mongodb')) {
     return
 }
 */
-var async = require('async')
+var async = require('async');
 
-var Location = require('./models/location')
-var Position = require('./models/positions')
-var Staff = require('./models/staff')
-var Team = require('./models/team')
+var Location = require('./models/location');
+var Position = require('./models/positions');
+var Staff = require('./models/staff');
+// var Team = require('./models/team')
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0];
@@ -24,10 +24,10 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-var locations = []
-var positions = []
-var staff_names = []
-var teams = []
+var locations = [];
+var positions = [];
+var staff_names = [];
+// var teams = []
 
 function staffCreate(first_name, last_name, date_of_birth, phone, email, [history] ,pastor, location, position, cb) {
   staffdetail = 
@@ -47,8 +47,9 @@ function staffCreate(first_name, last_name, date_of_birth, phone, email, [histor
        
   staff.save(function (err) {
     if (err) {
-      cb(err, null)
-      return
+      // cb(err, null);
+      console.log(err);
+      return;
     }
     console.log('New Staff: ' + staff);
     staff_names.push(staff)
@@ -83,7 +84,7 @@ function positionCreate(title, cb) {
     cb(null, position);
   }   );
 }
-
+/*
 function teamsCreate(name, cb) {
   var team = new Team({ name: name });
        
@@ -97,6 +98,7 @@ function teamsCreate(name, cb) {
     cb(null, team);
   }   );
 }
+*/
 
 function createPositionsLocations(cb) {
     async.series([
@@ -136,14 +138,14 @@ function createPositionsLocations(cb) {
 function createStaff(cb) {
     async.parallel([
         function(callback) {
-          staffCreate('Jubilee', 'Love', '1-320-441-9952', 'jubilove@protonmail.com', ['Launched: Feb 8th, 2021', 'Fully funded!'], 'Mallory Flippin', locations[2], positions[1], callback);
+          staffCreate('Jubilee', 'Love', 04-05-1990,'1-320-441-9952', 'jubilove@protonmail.com', ['Launched: Feb 8th, 2021', 'Fully funded!'], 'Mallory Flippin', locations[2], positions[1], callback);
         },
         function(callback) {
-          staffCreate('Audrea', 'Sprinkle', '90-537-456-9357', 'audrea@fastmail.com', ['Went on a trip!', 'Launched: ???'], 'Karen Mahler', locations[6], positions[1], callback);
+          staffCreate('Audrea', 'Sprinkle', 04-05-1990, '90-537-456-9357', 'audrea@fastmail.com', ['Went on a trip!', 'Launched: ???'], 'Karen Mahler', locations[6], positions[1], callback);
         },
         function(callback) {
-          staffCreate('Emberlen', 'Binford', '1-936-615-3272', 'emberlen@fastmail.com', ['Scheduled a prayer call', 'Launched: 2020', 'Landed: 2020'], 'Keisha Pierce', locations[5], positions[1], callback);
-        },
+          staffCreate('Emberlen', 'Binford', 04-05-1990, '1-936-615-3272', 'emberlen@fastmail.com', ['Scheduled a prayer call', 'Launched: 2020', 'Landed: 2020'], 'Keisha Pierce', locations[5], positions[1], callback);
+        }
         ],
         // optional callback
         cb);
@@ -156,7 +158,9 @@ async.series([
 // Optional callback
 function(err, results) {
     if (err) {
-        console.log('FINAL ERR: '+err);
+        console.log('FINAL ERR: '+ err);
+    } else {
+      console.log('Done!');
     }
     
     // All done, disconnect from database
