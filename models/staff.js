@@ -9,7 +9,7 @@ var StaffSchema = new Schema(
         date_of_birth: { type: Date, required: true },
         phone_number: { type: String, required: true },
         email_address: { type: String, required: true },
-        // history: [ { type: String, required: true} ],
+        history: [ { type: String} ],
         pastor: { type: String, required: true },
         location: { type: Schema.Types.ObjectId, ref: 'Locations', required: true},
         // team: { type: Schema.Types.ObjectId, ref: 'Teams', required: true},
