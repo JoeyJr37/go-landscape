@@ -13,14 +13,22 @@ exports.index = function(req, res) {
             Locations.countDocuments({}, callback);
         },
     }, function(err, results) {
-        res.render('index', { title: 'Local Library Home', error: err, data: results });
+        res.render('index', { title: 'GO Landscape', error: err, data: results });
     });
 };
 
-// Display list of all books.
-exports.staff_list = function(req, res) {
-    res.send('NOT IMPLEMENTED: Staff list');
-};
+// Display list of all staff.
+exports.staff_list = function(req, res, next) {
+
+    Staff.find({}, 'first_name last_name location')
+      .populate('location')
+      .exec(function (err, list_staff) {
+        if (err) { return next(err); }
+        //Successful, so render
+        res.render('staff_list', { title: 'Staff List', staff_list: list_staff });
+      });
+  
+  };
 
 // Display detail page for a specific staff.
 exports.staff_detail = function(req, res) {

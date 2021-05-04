@@ -1,8 +1,15 @@
 var Locations = require('../models/location');
 
 // Display list of all Genre.
-exports.locations_list = function(req, res) {
-    res.send('NOT IMPLEMENTED: locations list');
+exports.locations_list = function(req, res, next) {
+
+  Locations.find({}, 'city country')
+    .exec(function (err, list_locations) {
+      if (err) { return next(err); }
+      //Successful, so render
+      res.render('locations_list', { title: 'Locations List', locations_list: list_locations });
+    });
+
 };
 
 // Display detail page for a specific locations.

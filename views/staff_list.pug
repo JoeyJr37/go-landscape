@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+
+  ul
+    - staff_list.sort(function(a, b) {let textA = a.first_name.toUpperCase(); let textB = b.first_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+    each staff in staff_list
+      li
+        a(href=staff.url) #{staff.first_name} #{staff.last_name}
+    else
+      li There are no staff.

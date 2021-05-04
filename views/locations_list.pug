@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1= title
+
+  ul
+    - locations_list.sort(function(a, b) {let textA = a.city.toUpperCase(); let textB = b.city.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+    each location in locations_list
+      li
+        a(href=location.url) #{location.city}
+        |  (#{location.country})
+
+    else
+      li There are no locations.
