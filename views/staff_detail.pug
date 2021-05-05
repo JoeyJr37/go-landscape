@@ -1,16 +1,15 @@
 extends layout
 
 block content
-  h1 Title: #{staff.first_name}
+  h1 Name: #{staff.first_name} #{staff.last_name}
 
-  p #[strong Team:]
-    a(href=staff.team.url) #{staff.team}
+  p #[strong Team:] #{staff.team}
   p #[strong DOB:] #{staff.date_of_birth}
   p #[strong Phone:] #{staff.phone_number}
   p #[strong Email:] #{staff.email_address}
-  p #[strong Location:] #{staff.location}
+  p #[strong Location:] #{staff.location.city} #{staff.location.country}
   p #[strong Field Staff Pastor:] #{staff.pastor}
-  p #[strong Position:] #{staff.position}
+  p #[strong Position:] #{staff.position.title}
 
   div(style='margin-left:20px;margin-top:20px')
     h4 History

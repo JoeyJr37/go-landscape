@@ -2,6 +2,7 @@ var Staff = require('../models/staff');
 var Locations = require('../models/location');
 var History = require('../models/history');
 var Teams = require('../models/team');
+var Positions = require('../models/positions');
 
 var async = require('async');
 
