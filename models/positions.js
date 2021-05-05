@@ -11,7 +11,7 @@ var PositionSchema = new Schema(
 PositionSchema
 .virtual('url')
 .get(function () {
-    return '/positions/' + this._id;
+    return '/dashboard/positions/' + this._id;
 });
 
 // Export model

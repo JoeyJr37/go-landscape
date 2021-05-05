@@ -12,7 +12,7 @@ var LocationSchema = new Schema(
 LocationSchema
 .virtual('url')
 .get(function () {
-    return '/locations/' + this._id;
+    return '/dashboard/locations/' + this._id;
 });
 
 // Export model

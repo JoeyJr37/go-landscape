@@ -30,7 +30,7 @@ StaffSchema
 StaffSchema
 .virtual('url')
 .get(function () {
-    return '/staff/' + this._id;
+    return '/dashboard/staff/' + this._id;
 });
 
 // Export model

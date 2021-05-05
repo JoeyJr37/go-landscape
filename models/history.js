@@ -14,7 +14,7 @@ var HistorySchema = new Schema(
 HistorySchema
 .virtual('url')
 .get(function () {
-    return '/history/' + this._id;
+    return '/dashboard/history/' + this._id;
 });
 
 // Export model

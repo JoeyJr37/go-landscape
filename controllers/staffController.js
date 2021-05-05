@@ -1,5 +1,6 @@
 var Staff = require('../models/staff');
 var Locations = require('../models/location');
+var History = require('../models/history');
 
 var async = require('async');
 
@@ -27,7 +28,6 @@ exports.staff_list = function(req, res, next) {
         //Successful, so render
         res.render('staff_list', { title: 'Staff List', staff_list: list_staff });
       });
-  
   };
 
 // Display detail page for a specific staff.

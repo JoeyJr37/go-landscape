@@ -9,7 +9,6 @@ exports.locations_list = function(req, res, next) {
       //Successful, so render
       res.render('locations_list', { title: 'Locations List', locations_list: list_locations });
     });
-
 };
 
 // Display detail page for a specific locations.

@@ -12,7 +12,7 @@ var TeamSchema = new Schema(
 TeamSchema
 .virtual('url')
 .get(function() {
-    return '/teams/' + this._id;
+    return '/dashboard/teams/' + this._id;
 });
 
 // Export model
