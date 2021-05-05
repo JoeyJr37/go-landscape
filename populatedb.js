@@ -138,13 +138,13 @@ function createPositionsLocations(cb) {
 function createStaff(cb) {
     async.parallel([
         function(callback) {
-          staffCreate('Jubilee', 'Love', 04-05-1990,'1-320-441-9952', 'jubilove@protonmail.com', ['Launched: Feb 8th, 2021', 'Fully funded!'], 'Mallory Flippin', locations[2], positions[1], callback);
+          staffCreate('Jubilee', 'Love', '1990-04-05','1-320-441-9952', 'jubilove@protonmail.com', ['Launched: Feb 8th, 2021', 'Fully funded!'], 'Mallory Flippin', locations[2], positions[1], callback);
         },
         function(callback) {
-          staffCreate('Audrea', 'Sprinkle', 04-05-1990, '90-537-456-9357', 'audrea@fastmail.com', ['Went on a trip!', 'Launched: ???'], 'Karen Mahler', locations[6], positions[1], callback);
+          staffCreate('Audrea', 'Sprinkle', '1990-04-05', '90-537-456-9357', 'audrea@fastmail.com', ['Went on a trip!', 'Launched: ???'], 'Karen Mahler', locations[6], positions[1], callback);
         },
         function(callback) {
-          staffCreate('Emberlen', 'Binford', 04-05-1990, '1-936-615-3272', 'emberlen@fastmail.com', ['Scheduled a prayer call', 'Launched: 2020', 'Landed: 2020'], 'Keisha Pierce', locations[5], positions[1], callback);
+          staffCreate('Emberlen', 'Binford', '1990-04-05', '1-936-615-3272', 'emberlen@fastmail.com', ['Scheduled a prayer call', 'Launched: 2020', 'Landed: 2020'], 'Keisha Pierce', locations[5], positions[1], callback);
         }
         ],
         // optional callback

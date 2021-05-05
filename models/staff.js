@@ -9,15 +9,13 @@ var StaffSchema = new Schema(
         date_of_birth: { type: Date, required: true },
         phone_number: { type: String },
         email_address: { type: String},
-        history: [ { type: String} ],
-        pastor: { type: String, required: true },
         location: { type: Schema.Types.ObjectId, ref: 'Locations', required: true},
-        // team: { type: Schema.Types.ObjectId, ref: 'Teams', required: true},
+        pastor: { type: String},
         position: { type: Schema.Types.ObjectId, ref: 'Positions', required: true },
-        updated: {type: Date, default: Date.now},
+        team: { type: Schema.Types.ObjectId, ref: 'Teams'},
+        // history: [ { type: Schema.Types.ObjectId, ref: 'History'} ],
+        // status: most recently updated history object
         // team_members
-        // status
-        
     }
 );
 
