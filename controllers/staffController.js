@@ -1,6 +1,7 @@
 var Staff = require('../models/staff');
 var Locations = require('../models/location');
 var History = require('../models/history');
+var Teams = require('../models/team');
 
 var async = require('async');
 
@@ -31,8 +32,33 @@ exports.staff_list = function(req, res, next) {
   };
 
 // Display detail page for a specific staff.
-exports.staff_detail = function(req, res) {
-    res.send('NOT IMPLEMENTED: Staff detail: ' + req.params.id);
+exports.staff_detail = function(req, res, next) {
+
+    async.parallel({
+        staff: function(callback) {
+
+            Staff.findById(req.params.id)
+              .populate('location')
+              .populate('position')
+              .populate('team')
+              .exec(callback);
+        },
+        history: function(callback) {
+
+          History.find({ 'staff_member': req.params.id })
+          .exec(callback);
+        },
+    }, function(err, results) {
+        if (err) { return next(err); }
+        if (results.staff==null) { // No results.
+            var err = new Error('Staff not found');
+            err.status = 404;
+            return next(err);
+        }
+        // Successful, so render.
+        res.render('staff_detail', { title: results.staff.first_name, staff: results.staff, history: results.history } );
+    });
+
 };
 
 // Display staff create form on GET.

@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1 Title: #{staff.first_name}
+
+  p #[strong Team:]
+    a(href=staff.team.url) #{staff.team}
+  p #[strong DOB:] #{staff.date_of_birth}
+  p #[strong Phone:] #{staff.phone_number}
+  p #[strong Email:] #{staff.email_address}
+  p #[strong Location:] #{staff.location}
+  p #[strong Field Staff Pastor:] #{staff.pastor}
+  p #[strong Position:] #{staff.position}
+
+  div(style='margin-left:20px;margin-top:20px')
+    h4 History
+
+    each val in history
+      hr
+      p #[strong Date:] #{val.updated}
+      p #[strong Update:] #{val.status_message}
