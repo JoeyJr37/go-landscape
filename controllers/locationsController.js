@@ -27,13 +27,13 @@ exports.locations_detail = function(req, res, next) {
         },
     }, function(err, results) {
         if (err) { return next(err);}
-        if (results.location == null) { // no results.
+        if (results.locations == null) { // no results.
             var err = new Error('Location not found');
             err.status = 404;
             return next(err);
         }
         // Successful, so render
-        res.render('location_detail', {title: 'Location', location: results.location, staff_at_location: results.staff_at_location});
+        res.render('location_detail', {title: 'Location', locations: results.locations, staff_at_location: results.staff_at_location});
     });
 };
 
