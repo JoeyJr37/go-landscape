@@ -1,0 +1,45 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='first_name') First Name:
+      input#title.form-control(type='text', placeholder='First Name' name='first_name' required='true' value=(undefined===staff ? '' : staff.first_name) )
+    div.form-group
+      label(for='last_name') Last Name:
+      input#title.form-control(type='text', placeholder='Last Name' name='last_name' required='true' value=(undefined===staff ? '' : staff.last_name) )
+    div.form-group
+      label(for='phone_number') Phone Number:
+      input#title.form-control(type='text', placeholder='Phone Number' name='phone_number' required='true' value=(undefined===staff ? '' : staff.phone_number) )
+    div.form-group
+      label(for='email_address') Email Address:
+      input#title.form-control(type='text', placeholder='Email Address' name='email_address' required='true' value=(undefined===staff ? '' : staff.email_address) )
+    div.form-group
+      label(for='pastor') Field Staff Pastor:
+      input#title.form-control(type='text', placeholder='Field Staff Pastor' name='pastor' required='true' value=(undefined===staff ? '' : staff.pastor) )
+    div.form-group
+      label(for='date_of_birth') Date of birth:
+      input#date_of_birth.form-control(type='date' name='date_of_birth' value=(undefined===staff ? '' : staff.date_of_birth) )
+    div.form-group
+      label(for='location') Location:
+      select#location.form-control(type='select', placeholder='Select location' name='location' required='true' )
+        - locations.sort(function(a, b) {let textA = a.city.toUpperCase(); let textB = b.city.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for location in locations
+          if staff
+            option(value=location._id selected=(location._id.toString()===staff.location._id.toString() ? 'selected' : false) ) #{location.city}
+          else
+            option(value=location._id) #{location.city}
+    div.form-group
+      label(for='position') Position:
+      select#location.form-control(type='select', name='position' required='true' )
+        for position in positions
+            option(value=position._id) #{position.title}
+
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg
