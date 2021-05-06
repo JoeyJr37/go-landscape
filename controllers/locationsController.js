@@ -1,6 +1,7 @@
 var Locations = require('../models/location');
 var Staff = require('../models/staff');
 var async = require('async');
+const { body, validationResult } = require("express-validator");
 
 // Display list of all Genre.
 exports.locations_list = function(req, res, next) {
@@ -39,14 +40,55 @@ exports.locations_detail = function(req, res, next) {
 
 
 // Display locations create form on GET.
-exports.locations_create_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: locations create GET');
+exports.locations_create_get = function(req, res, next) {
+    res.render('location_form', {title: 'Create Location'});
+    
 };
 
 // Handle locations create on POST.
-exports.locations_create_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: locations create POST');
-};
+exports.locations_create_post = [
+    // Validate and sanitize the city & country fields.
+    body('city', 'City name required').trim().isLength({ min: 1}).escape(),
+    body('country', 'Country name required').trim().isLength({ min: 1}).escape(),
+
+    // Process request after validation and sanitization.
+    (req, res, next) => {
+
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        // Create a location object with escaped and trimmed data.
+        var location = new Locations(
+            { city: req.body.city, country: req.body.country}
+        );
+        if (!errors.isEmpty()) {
+            // There are errors. Render the form again with sanitized values/error messages.
+            res.render('location_form', {title: 'Create Location', location: location, errors:errors.array()});
+            return;
+        }
+        else {
+            // Data from form is valid.
+            // Check if location with same city name already exists
+            Locations.findOne({ 'city' : req.body.city })
+            .exec( function(err, found_location) {
+                if (err) { return next(err); }
+
+                if (found_location) {
+                    // Location exists, redirect to its detail page.
+                    res.redirect(found_location.url);
+                }
+                else {
+
+                    location.save(function (err) {
+                        if (err) { return next(err); }
+                        // Location saved. Redirect to location detail page
+                        res.redirect(location.url);
+                    });
+                }
+            });
+        }
+    }
+];
 
 // Display locations delete form on GET.
 exports.locations_delete_get = function(req, res) {
