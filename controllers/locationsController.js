@@ -1,4 +1,6 @@
 var Locations = require('../models/location');
+var Staff = require('../models/staff');
+var async = require('async');
 
 // Display list of all Genre.
 exports.locations_list = function(req, res, next) {
@@ -12,9 +14,29 @@ exports.locations_list = function(req, res, next) {
 };
 
 // Display detail page for a specific locations.
-exports.locations_detail = function(req, res) {
-    res.send('NOT IMPLEMENTED: locations detail: ' + req.params.id);
+exports.locations_detail = function(req, res, next) {
+
+    async.parallel({
+        locations: function(callback) {
+            Locations.findById(req.params.id)
+            .exec(callback);
+        },
+        staff_at_location: function(callback) {
+            Staff.find({ 'location' : req.params.id})
+            .exec(callback);
+        },
+    }, function(err, results) {
+        if (err) { return next(err);}
+        if (results.location == null) { // no results.
+            var err = new Error('Location not found');
+            err.status = 404;
+            return next(err);
+        }
+        // Successful, so render
+        res.render('location_detail', {title: 'Location', location: results.location, staff_at_location: results.staff_at_location});
+    });
 };
+
 
 // Display locations create form on GET.
 exports.locations_create_get = function(req, res) {

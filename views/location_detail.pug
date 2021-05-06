@@ -1,0 +1,17 @@
+extends layout
+
+block content
+
+  h1 Location: #{location.city} #{location.country}
+
+  div(style='margin-left:20px;margin-top:20px')
+
+    h4 Staff
+
+    dl
+      each staff in staff_at_location
+        dt
+          a(href=staff.url) #{staff.last_name}, #{staff.first_name}
+
+      else
+        p This location has no staff
