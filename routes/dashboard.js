@@ -4,7 +4,7 @@ var router = express.Router();
 // Require controller modules.
 var staff_controller = require('../controllers/staffController');
 var locations_controller = require('../controllers/locationsController');
-var teams_controller = require('../controllers/teamsController');
+var history_controller = require('../controllers/historyController');
 
 /// STAFF ROUTES ///
 
@@ -36,6 +36,14 @@ router.get('/staff/:id', staff_controller.staff_detail);
 // GET request for list of all Staff members.
 router.get('/staff', staff_controller.staff_list);
 
+/// HISTORY ROUTES ///
+
+// GET request for creating Updates
+router.get('/history/create', history_controller.history_create_get);
+
+// POST request for creating Updates
+router.post('/history/create', history_controller.history_create_post);
+
 /// LOCATIONS ROUTES ///
 
 // GET request for creating Location. NOTE This must come before route for id (i.e. display author).
@@ -61,31 +69,5 @@ router.get('/locations/:id', locations_controller.locations_detail);
 
 // GET request for list of all Locations.
 router.get('/locations', locations_controller.locations_list);
-
-/// TEAMS ROUTES ///
-
-// GET request for creating a BookInstance. NOTE This must come before route that displays BookInstance (uses id).
-router.get('/teams/create', teams_controller.teams_create_get);
-
-// POST request for creating teams.
-router.post('/teams/create', teams_controller.teams_create_post);
-
-// GET request to delete teams.
-router.get('/teams/:id/delete', teams_controller.teams_delete_get);
-
-// POST request to delete teams.
-router.post('/teams/:id/delete', teams_controller.teams_delete_post);
-
-// GET request to update teams.
-router.get('/teams/:id/update', teams_controller.teams_update_get);
-
-// POST request to update teams.
-router.post('/teams/:id/update', teams_controller.teams_update_post);
-
-// GET request for one teams.
-router.get('/teams/:id', teams_controller.teams_detail);
-
-// GET request for list of all teams.
-router.get('/teams', teams_controller.teams_list);
 
 module.exports = router;

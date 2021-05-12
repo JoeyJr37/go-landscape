@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  h1=title
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='staff_member') Staff:
+      select#staff.form-control(type='select' placeholder='Select staff' name='staff_member' required='true')
+        - staff_member_list.sort(function(a, b) {let textA = a.first_name; let textB = b.first_name; return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for staff in staff_member_list
+            if update
+                option(value=staff._id selected=(update.staff_member.toString()==staff._id.toString() ? 'selected' : false)) #{staff.first_name}
+            else
+                option(value=staff._id) #{staff.first_name}
+
+    div.form-group
+      label(for='status_message') Update:
+      input#status_message.form-control(type='text' placeholder='Enter update here' name='status_message' required='true' value=(undefined===update ? '' : update.status_message))
+
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

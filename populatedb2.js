@@ -123,7 +123,7 @@ function createHistory(cb) {
             historyCreate('Test update 3', staff_members[0], callback);
         },
         function(callback) {
-            historyCreate('Test update 1', staff_members[0], callback);
+            historyCreate('Test update 1', staff_members[1], callback);
         },
     ],
     // optional callback
