@@ -3,7 +3,10 @@ extends layout
 block content
   h1 Name: #{staff.first_name} #{staff.last_name}
 
-  p #[strong Team:] #{staff.team}
+    hr
+  p
+    a(href=staff.url+'/update') Edit Personal Info
+
   p #[strong DOB:] #{staff.date_of_birth}
   p #[strong Phone:] #{staff.phone_number}
   p #[strong Email:] #{staff.email_address}
@@ -16,5 +19,5 @@ block content
 
     each val in history
       hr
-      p #[strong Date:] #{val.updated}
       p #[strong Update:] #{val.status_message}
+      p #[strong Date:] #{val.updated}

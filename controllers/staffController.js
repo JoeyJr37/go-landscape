@@ -149,11 +149,98 @@ exports.staff_delete_post = function(req, res) {
 };
 
 // Display staff update form on GET.
-exports.staff_update_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: Staff update GET');
+exports.staff_update_get = function(req, res, next) {
+    // Get staff, locations & position for form.
+    async.parallel({
+        staff: function(callback) {
+            Staff.findById(req.params.id).populate('location').populate('position').exec(callback);
+        },
+        positions: function(callback) {
+            Positions.find(callback);
+        },
+        locations: function(callback) {
+            Locations.find(callback);
+        },
+        }, function(err, results) {
+            if (err) { return next(err); }
+            if (results.staff==null) { // No results.
+                var err = new Error('Staff not found');
+                err.status = 404;
+                return next(err);
+            }
+            // Success.
+        
+            res.render('staff_form', { title: 'Update Staff', positions: results.positions, locations: results.locations, staff: results.staff });
+        });
+
 };
 
 // Handle staff update on POST.
-exports.staff_update_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Staff update POST');
-};
+exports.staff_update_post = [
+
+    // Validate and sanitise fields.
+    body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
+        .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+    body('last_name').trim().isLength({ min: 1 }).escape().withMessage('Last name must be specified.')
+        .isAlphanumeric().withMessage('Last name has non-alphanumeric characters.'),
+    body('date_of_birth', 'Invalid date of birth').isISO8601().toDate(),
+    body('phone_number', 'Phone number must not be empty').trim().isLength({ min: 1}).escape(),
+    body('email_address', 'Email address must not be empty').trim().isLength({ min: 1}).escape(),
+    body('location.*').escape(),
+    body('pastor', 'Field Staff Pastor must not be empty').trim().isLength({ min: 1}).escape(),
+    body('position.*').escape(),
+
+    // Process request after validation and sanitization.
+    (req, res, next) => {
+
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        // Create a Book object with escaped/trimmed data and old id.
+        var staff = new Staff(
+            {
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                date_of_birth: req.body.date_of_birth,
+                phone_number: req.body.phone_number,
+                email_address: req.body.email_address,
+                location: req.body.location,
+                pastor: req.body.pastor,
+                position: req.body.position,
+                _id:req.params.id //This is required, or a new ID will be assigned!
+            });
+
+        if (!errors.isEmpty()) {
+            // There are errors. Render form again with sanitized values/error messages.
+
+            // Get all authors and genres for form.
+            async.parallel({
+                positions: function(callback) {
+                    Positions.find(callback);
+                },
+                locations: function(callback) {
+                    Locations.find(callback);
+                },
+            }, function(err, results) {
+                if (err) { return next(err); }
+
+                // Mark our selected positions as checked.
+                for (let i = 0; i < results.positions.length; i++) {
+                    if (staff.positions.indexOf(results.positions[i]._id) > -1) {
+                        results.positions[i].checked='true';
+                    }
+                }
+                res.render('staff_form', { title: 'Update Staff',positions: results.positions, locations: results.locations, staff: staff, errors: errors.array() });
+            });
+            return;
+        }
+        else {
+            // Data from form is valid. Update the record.
+            Staff.findByIdAndUpdate(req.params.id, staff, {}, function (err,theStaff) {
+                if (err) { return next(err); }
+                   // Successful - redirect to book detail page.
+                   res.redirect(theStaff.url);
+                });
+        }
+    }
+];

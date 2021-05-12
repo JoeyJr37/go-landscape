@@ -28,13 +28,28 @@ block content
         - locations.sort(function(a, b) {let textA = a.city.toUpperCase(); let textB = b.city.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
         for location in locations
           if staff
-            option(value=location._id selected=(location._id.toString()===staff.location._id.toString() ? 'selected' : false) ) #{location.city}
+            option(
+              value=location._id 
+              selected=(
+                location._id.toString()==staff.location._id
+                || location._id.toString()==staff.location
+                ) ? 'selected' : false
+              ) #{location.city}
           else
             option(value=location._id) #{location.city}
     div.form-group
       label(for='position') Position:
-      select#location.form-control(type='select', name='position' required='true' )
+      select#position.form-control(type='select', name='position' required='true' )
         for position in positions
+          if staff
+            option(
+              value=position._id 
+              selected=(
+                position._id.toString()==staff.position._id
+                || position._id.toString()==staff.position
+                ) ? 'selected' : false
+              ) #{position.title}
+          else
             option(value=position._id) #{position.title}
 
     button.btn.btn-primary(type='submit') Submit
