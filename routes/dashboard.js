@@ -9,7 +9,7 @@ var history_controller = require('../controllers/historyController');
 /// STAFF ROUTES ///
 
 // GET catalog home page.
-router.get('/', staff_controller.index);
+router.get('/', staff_controller.staff_list);
 
 // GET request for creating a Staff member. 
 // NOTE This must come before routes that display Staff (uses id).

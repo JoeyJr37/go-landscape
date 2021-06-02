@@ -55,8 +55,12 @@ exports.staff_detail = function(req, res, next) {
             err.status = 404;
             return next(err);
         }
+        
         // Successful, so render.
-        res.render('staff_detail', { title: results.staff.first_name, staff: results.staff, history: results.history } );
+        
+        let mostRecentUpdateFirst = results.history.reverse();
+
+        res.render('staff_detail', { title: results.staff.first_name, staff: results.staff, history: mostRecentUpdateFirst } );
     });
 
 };

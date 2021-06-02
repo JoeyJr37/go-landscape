@@ -28,7 +28,6 @@ var staff_members = [];
 var locations = [];
 var positions = [];
 var histories = [];
-var teams = [];
 
 function locationCreate(city, country, cb) {
   var location = new Location({ city: city, country: country });
@@ -41,20 +40,6 @@ function locationCreate(city, country, cb) {
     console.log('New Location: ' + location);
     locations.push(location)
     cb(null, location);
-  }   );
-}
-
-function teamCreate(name, cb) {
-  var team = new Team({ name: name });
-       
-  team.save(function (err) {
-    if (err) {
-      cb(err, null);
-      return;
-    }
-    console.log('New Team: ' + team);
-    teams.push(team)
-    cb(null, team);
   }   );
 }
 
@@ -130,22 +115,6 @@ function createHistory(cb) {
     cb);
 }
 
-function createTeams(cb) {
-    async.series([
-        function(callback) {
-            teamCreate('Antalya', callback);
-        },
-        function(callback) {
-            teamCreate('Gateway', callback);
-        },
-        function(callback) {
-            teamCreate('Izmir', callback);
-        },
-    ],
-    //optional callback
-    cb);
-}
-
 function createStaffMembers(cb) {
     async.series([
         function(callback) {
@@ -195,7 +164,6 @@ async.series([
     createPositionLocations,
     createStaffMembers,
     createHistory,
-    createTeams,
 ],
 // Optional callback
 function(err, results) {
