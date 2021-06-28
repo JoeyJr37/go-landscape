@@ -13,7 +13,7 @@ var Staff = require('./models/staff');
 var Location = require('./models/location');
 var Position = require('./models/positions');
 var History = require('./models/history');
-var Team = require('./models/team');
+// var Team = require('./models/team');
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0];
@@ -218,7 +218,6 @@ function createPositionLocations(cb) {
 async.series([
     createPositionLocations,
     createStaffMembers,
-    createHistory,
 ],
 // Optional callback
 function(err, results) {
